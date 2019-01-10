@@ -14,7 +14,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Fatal(
-		http.ListenAndServe(config.Frontend.Address, router.Router),
-	)
+	log.Println("starting frontend server")
+	log.Fatal(http.ListenAndServe(config.Frontend.Address, router.Router))
 }

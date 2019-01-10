@@ -1,7 +1,7 @@
 package sessions
 
 import (
-	"fmt"
+	"log"
 
 	"bitbucket.org/mendelgusmao/me_gu/frontend/config"
 	"github.com/gorilla/sessions"
@@ -14,7 +14,7 @@ func init() {
 }
 
 func createSessionStore(c *config.Specification) error {
-	fmt.Println("session key", c.SessionKey)
+	log.Println("creating session store with specified session key")
 	store = sessions.NewCookieStore([]byte(c.SessionKey))
 
 	return nil
