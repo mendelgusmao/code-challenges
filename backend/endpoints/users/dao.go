@@ -12,7 +12,7 @@ func newDAO(db *sql.DB) *dao {
 	return &dao{db: db}
 }
 
-func (d *dao) findByID(id int) (*User, error) {
+func (d *dao) findByID(id int64) (*User, error) {
 	query := "SELECT id, email FROM users WHERE id = ?"
 
 	row := d.db.QueryRow(query, id)
@@ -24,6 +24,26 @@ func (d *dao) findByID(id int) (*User, error) {
 	}
 
 	return user, nil
+}
+
+func (d *dao) create(u *User) error {
+	query := "INSERT INTO users (email, password) VALUES (?, ?)"
+
+	result, err := d.db.Exec(query, u.Email, u.Password)
+
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId()
+
+	if err != nil {
+		return err
+	}
+
+	u.ID = id
+
+	return nil
 }
 
 func scanOne(row *sql.Row) (*User, error) {

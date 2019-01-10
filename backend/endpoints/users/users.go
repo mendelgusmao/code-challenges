@@ -21,8 +21,7 @@ func init() {
 
 func getUser(w http.ResponseWriter, r *http.Request) {
 	db := context.Get(r, "db")
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
 
 	userDAO := newDAO(db.(*sql.DB))
 	user, err := userDAO.findByID(id)
@@ -42,4 +41,32 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
+	db := context.Get(r, "db")
+
+	userDAO := newDAO(db.(*sql.DB))
+	var user User
+
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		log.Printf("createUser: %s", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if errs := user.validate(); errs != nil {
+		// TODO
+	}
+
+	if err := user.encryptPassword(); err != nil {
+		log.Printf("createUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	if err := userDAO.create(&user); err != nil {
+		log.Printf("createUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
