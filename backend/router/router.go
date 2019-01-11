@@ -9,4 +9,5 @@ var Router = mux.NewRouter()
 
 func init() {
 	Router.Use(middleware.Database)
+	Router.Use(middleware.Logging)
 }
