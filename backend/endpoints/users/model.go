@@ -24,6 +24,10 @@ func (u *User) apply(r *UserRequest) {
 	}
 }
 
+func (u *User) authenticate(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) == nil
+}
+
 func (u *User) filtered() User {
 	return User{
 		ID:        u.ID,
