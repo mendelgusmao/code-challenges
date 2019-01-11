@@ -16,7 +16,8 @@ func init() {
 	subrouter := router.Router.PathPrefix("/users").Subrouter()
 
 	subrouter.HandleFunc("/{id:[0-9]+}", getUser).Methods("GET")
-	subrouter.HandleFunc("", createUser).Methods("POST")
+	subrouter.HandleFunc("", createUser).Methods("PUT")
+	subrouter.HandleFunc("/{id:[0-9]+}", updateUser).Methods("PATCH")
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
@@ -37,30 +38,32 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(user.filtered())
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
 	db := context.Get(r, "db")
-
 	userDAO := newDAO(db.(*sql.DB))
-	var user User
 
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+	var userRequest UserRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&userRequest); err != nil {
 		log.Printf("createUser: %s", err)
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
 
-	if errs := user.validate(); errs != nil {
+	if errs := userRequest.validate(); errs != nil {
 		// TODO
 	}
 
-	if err := user.encryptPassword(); err != nil {
+	if err := userRequest.encryptPassword(); err != nil {
 		log.Printf("createUser: %s", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
+
+	user := User(userRequest)
 
 	if err := userDAO.create(&user); err != nil {
 		log.Printf("createUser: %s", err)
@@ -69,4 +72,51 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	db := context.Get(r, "db")
+	userDAO := newDAO(db.(*sql.DB))
+
+	var userRequest UserRequest
+
+	id, _ := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	user, err := userDAO.findByID(id)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "", http.StatusNotFound)
+			return
+		}
+
+		log.Printf("getUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&userRequest); err != nil {
+		log.Printf("updateUser: %s", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	if errs := userRequest.validate(); errs != nil {
+		// TODO
+	}
+
+	if err := userRequest.encryptPassword(); err != nil {
+		log.Printf("createUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	user.apply(&userRequest)
+
+	if err := userDAO.update(user); err != nil {
+		log.Printf("updateUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
