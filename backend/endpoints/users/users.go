@@ -12,13 +12,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func init() {
-	subrouter := router.Router.PathPrefix("/users").Subrouter()
+var subrouter = router.Router.PathPrefix("/users").Subrouter()
 
+func init() {
 	subrouter.HandleFunc("/{id:[0-9]+}", getUser).Methods("GET")
 	subrouter.HandleFunc("", createUser).Methods("PUT")
 	subrouter.HandleFunc("/{id:[0-9]+}", updateUser).Methods("PATCH")
 	subrouter.HandleFunc("/authenticate", authenticateUser).Methods("POST")
+
+	subrouter.HandleFunc("/password-reset", createPasswordResetRequest).Methods("POST")
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
