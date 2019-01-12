@@ -11,7 +11,7 @@ import (
 const sessionName = "session_id"
 
 func init() {
-	subrouter := router.Router.PathPrefix("/sessions").Subrouter()
+	subrouter := router.AJAX.PathPrefix("/sessions").Subrouter()
 
 	subrouter.HandleFunc("", getSession).Methods("GET")
 	subrouter.HandleFunc("", createSession).Methods("POST")
