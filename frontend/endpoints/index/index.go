@@ -14,5 +14,5 @@ func init() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	templates.Render(w, "index", nil)
+	templates.Render(w, r, "index", nil)
 }

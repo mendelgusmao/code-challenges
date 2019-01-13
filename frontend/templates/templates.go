@@ -23,6 +23,7 @@ func init() {
 func loadLayoutTemplates(c *config.Specification) error {
 	tmpl, err := template.
 		New("application").
+		Funcs(funcMap(nil, nil)).
 		ParseGlob(path.Join(c.TemplatesDir, "layout", "*"+extension))
 
 	if err != nil {
@@ -34,7 +35,7 @@ func loadLayoutTemplates(c *config.Specification) error {
 	return nil
 }
 
-func Render(w http.ResponseWriter, name string, data interface{}) {
+func Render(w http.ResponseWriter, r *http.Request, name string, data interface{}) {
 	t, ok := templates[name]
 
 	if !ok {
@@ -45,17 +46,19 @@ func Render(w http.ResponseWriter, name string, data interface{}) {
 			http.Error(w, "", http.StatusInternalServerError)
 		}
 
-		templates[name], err = layout.ParseFiles(path.Join(config.Frontend.TemplatesDir, name+extension))
+		t, err = layout.
+			Funcs(funcMap(w, r)).
+			ParseFiles(path.Join(config.Frontend.TemplatesDir, name+extension))
 
 		if err != nil {
 			log.Printf("template.Render: %s", err)
 			http.Error(w, "", http.StatusInternalServerError)
 		}
 
-		t = templates[name]
+		templates[name] = t
 	}
 
-	if err := t.ExecuteTemplate(w, "application", data); err != nil {
+	if err := t.Funcs(funcMap(w, r)).ExecuteTemplate(w, "application", data); err != nil {
 		log.Printf("template.Render: %s", err)
 		http.Error(w, "", http.StatusInternalServerError)
 	}
