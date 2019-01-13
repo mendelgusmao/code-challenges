@@ -5,10 +5,9 @@ import (
 	"net/http"
 
 	"bitbucket.org/mendelgusmao/me_gu/frontend/router"
+	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 )
-
-const sessionName = "session_id"
 
 func init() {
 	subrouter := router.AJAX.PathPrefix("/sessions").Subrouter()
@@ -19,11 +18,7 @@ func init() {
 }
 
 func getSession(w http.ResponseWriter, r *http.Request) {
-	session := retrieveSession(w, r)
-
-	if session == nil {
-		return
-	}
+	session := context.Get(r, "session").(*sessions.Session)
 
 	if valid, ok := session.Values["valid"]; !ok || (ok && !valid.(bool)) {
 		w.WriteHeader(http.StatusNotFound)
@@ -34,11 +29,7 @@ func getSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func createSession(w http.ResponseWriter, r *http.Request) {
-	session := retrieveSession(w, r)
-
-	if session == nil {
-		return
-	}
+	session := context.Get(r, "session").(*sessions.Session)
 
 	session.Values["valid"] = true
 
@@ -49,11 +40,7 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func destroySession(w http.ResponseWriter, r *http.Request) {
-	session := retrieveSession(w, r)
-
-	if session == nil {
-		return
-	}
+	session := context.Get(r, "session").(*sessions.Session)
 
 	session.Values["valid"] = false
 
@@ -61,16 +48,4 @@ func destroySession(w http.ResponseWriter, r *http.Request) {
 		log.Printf("sessions.destroySession: %s", err)
 		http.Error(w, "", http.StatusInternalServerError)
 	}
-}
-
-func retrieveSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
-	session, err := store.Get(r, sessionName)
-
-	if err != nil {
-		log.Printf("sessions.retrieveSession: %s", err)
-		http.Error(w, "", http.StatusInternalServerError)
-		return nil
-	}
-
-	return session
 }
