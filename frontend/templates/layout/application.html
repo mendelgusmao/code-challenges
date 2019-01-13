@@ -1,13 +1,59 @@
 {{ define "application" }}
+  <!DOCTYPE html>
   <html>
-    <head>
-      <title>MeGu - {{block "title" .}} {{end}}</title>
-      <style>
-        {{block "style" .}} {{end}}
-      </style>
-    </head>
-    <body>
-      {{template "content" .}}
-    </body>
+  <head>
+  	<meta charset="utf-8" />
+  	<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script><![endif]-->
+  	<title>MeGu - {{block "title" .}} {{end}}</title>
+  	<meta name="keywords" content="" />
+  	<meta name="description" content="" />
+    <style>
+      {{block "style" .}} {{end}}
+    </style>
+  </head>
+
+  <body>
+
+  <div class="wrapper">
+
+  	<header class="header">
+  		<h1 class="title">MeGu's Application</h1>
+      <div class="action">
+        {{ if loggedIn }}
+          <a href="/logout">Logout</a>
+        {{ else }}
+          <a href="/login">Login</a>
+        {{ end }}
+      </div>
+  	</header><!-- .header-->
+
+  	<div class="middle">
+
+  		<div class="container">
+  			<main class="content">
+  				{{template "content" .}}
+  			</main><!-- .content -->
+  		</div><!-- .container-->
+
+  		<aside class="left-sidebar">
+        <ul class="menu">
+          <li><a href="">Home</a></li>
+          {{ if loggedIn }}
+          <li><a href="/profile">Profile</a></li>
+          {{ end }}
+        </ul>
+      </aside><!-- .left-sidebar -->
+
+  	</div><!-- .middle-->
+
+  	<footer class="footer">
+      <div class="made-by">
+        Made by <a href="https://github.com/mendelgusmao">github.com/mendelgusmao</a>
+      </div>
+    </footer><!-- .footer -->
+
+  </div><!-- .wrapper -->
+
+  </body>
   </html>
 {{ end }}
