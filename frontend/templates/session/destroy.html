@@ -1,0 +1,11 @@
+{{define "title"}}Login{{end}}
+{{define "content"}}
+  <form action="/session/destroy" method="post">
+    <div class="form-field form-submit">
+      <label for="destroy-session">
+      <p>
+        <button id="destroy-session" type="button">Logout</button>
+      </p>
+    </div>
+  </form>
+{{end}}

@@ -12,7 +12,8 @@ func RequireSession(next http.Handler) http.Handler {
 		session := context.Get(r, "session").(*sessions.Session)
 
 		if valid, ok := session.Values["valid"]; !ok || (ok && !valid.(bool)) {
-			http.Redirect(w, r, "/", http.StatusFound)
+			session.AddFlash("You should log in")
+			http.Redirect(w, r, "/session/new", http.StatusFound)
 			return
 		}
 

@@ -8,11 +8,9 @@ import (
 
 var (
 	Router = mux.NewRouter()
-	AJAX   = Router.PathPrefix("/ajax").Subrouter()
 )
 
 func init() {
 	Router.Use(common.Logging)
 	Router.Use(middleware.Session)
-	AJAX.Use(common.ContentType("application/json; charset=utf-8"))
 }

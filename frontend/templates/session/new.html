@@ -1,0 +1,28 @@
+{{define "title"}}Login{{end}}
+{{define "content"}}
+  <form action="/session/new" method="post">
+    <div class="form-field">
+      <label for="email">E-mail address</label>
+      <p>
+        <input type="text" name="full_name" value="{{ .User.email }}" />
+      </p>
+    </div>
+
+    <div class="form-field">
+      <label for="password">Password</label>
+      <p>
+        <input type="text" name="password" value="{{ .User.password }}" />
+      </p>
+    </div>
+
+    <div class="form-field form-submit">
+      <p>
+        <button id="update-profile" type="button">Log in</button>
+      </p>
+
+      <div class="forgot-password">
+        <a href="/password/reset" class="forgot-password-message">Forgot your password?</a>
+      </div>
+    </div>
+  </form>
+{{end}}
