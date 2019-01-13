@@ -1,0 +1,20 @@
+{{define "title"}}Profile{{end}}
+{{define "content"}}
+<div class="profile">
+  <h1 class="profile-title">{{ .User.full_name }}'s profile</h1>
+
+  <hr />
+
+  <p>
+    <strong class="field-label">E-mail address:</strong> {{ .User.email }}
+  </p>
+
+  <p>
+    <strong class="field-label">Telephone:</strong> {{ .User.telephone }}
+  </p>
+
+  <div class="profile-edit">
+    <a href="/profile/edit">Edit profile</a>
+  </div>
+</div>
+{{end}}
