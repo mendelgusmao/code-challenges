@@ -16,6 +16,7 @@ type Specification struct {
 	Address        string `default:":8000"`
 	BackendAddress string
 	SessionKey     string
+	TemplatesDir   string
 }
 
 func Load() error {

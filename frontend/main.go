@@ -7,6 +7,7 @@ import (
 	"bitbucket.org/mendelgusmao/me_gu/frontend/config"
 	_ "bitbucket.org/mendelgusmao/me_gu/frontend/endpoints"
 	"bitbucket.org/mendelgusmao/me_gu/frontend/router"
+	_ "bitbucket.org/mendelgusmao/me_gu/frontend/templates"
 )
 
 func main() {

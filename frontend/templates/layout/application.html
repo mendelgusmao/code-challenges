@@ -1,0 +1,13 @@
+{{ define "application" }}
+  <html>
+    <head>
+      <title>MeGu - {{block "title" .}} {{end}}</title>
+      <style>
+        {{block "style" .}} {{end}}
+      </style>
+    </head>
+    <body>
+      {{template "content" .}}
+    </body>
+  </html>
+{{ end }}
