@@ -6,6 +6,7 @@ import (
 
 	"bitbucket.org/mendelgusmao/me_gu/frontend/middleware"
 	"bitbucket.org/mendelgusmao/me_gu/frontend/router"
+	"bitbucket.org/mendelgusmao/me_gu/frontend/templates"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	resty "gopkg.in/resty.v1"
@@ -20,7 +21,9 @@ func init() {
 }
 
 func edit(w http.ResponseWriter, r *http.Request) {
-	handler(w, r, "profile/edit")
+	templates.
+		NewRenderer("profile/edit", "profile/form").
+		Do(w, r, buildTemplateData(w, r, "/profile/edit"))
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
@@ -54,5 +57,7 @@ func update(w http.ResponseWriter, r *http.Request) {
 
 	session.Save(r, w)
 
-	handler(w, r, "profile/edit")
+	templates.
+		NewRenderer("profile/edit", "profile/form").
+		Do(w, r, buildTemplateData(w, r, "/profile/edit"))
 }

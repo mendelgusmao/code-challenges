@@ -5,6 +5,7 @@ import (
 
 	"bitbucket.org/mendelgusmao/me_gu/frontend/middleware"
 	"bitbucket.org/mendelgusmao/me_gu/frontend/router"
+	"bitbucket.org/mendelgusmao/me_gu/frontend/templates"
 )
 
 func init() {
@@ -15,5 +16,7 @@ func init() {
 }
 
 func show(w http.ResponseWriter, r *http.Request) {
-	handler(w, r, "profile/show")
+	templates.
+		NewRenderer("profile/show").
+		Do(w, r, buildTemplateData(w, r, ""))
 }

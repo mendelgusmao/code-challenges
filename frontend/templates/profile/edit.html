@@ -5,33 +5,6 @@
 
   <hr />
 
-  <form id="profile-edit" action="/profile/edit" method="post">
-    <div class="form-field">
-      <label for="full_name">Full name:</label>
-      <p>
-        <input type="text" name="full_name" value="{{ .User.full_name }}" />
-      </p>
-    </div>
-
-    <div class="form-field">
-      <label for="email">E-mail address:</label>
-      <p>
-        <input type="text" name="email" value="{{ .User.email }}" />
-      </p>
-    </div>
-
-    <div class="form-field">
-      <label for="email">Telephone number:</label>
-      <p>
-        <input type="text" name="telephone" value="{{ .User.telephone }}" />
-      </p>
-    </div>
-
-    <div class="form-field form-submit">
-      <p>
-        <button id="update-profile" type="submit">Save</button>
-      </p>
-    </div>
-  </form>
+  {{ block "form" . }} {{ end }}
 </div>
 {{end}}

@@ -5,13 +5,17 @@ import (
 	"log"
 	"net/http"
 
-	"bitbucket.org/mendelgusmao/me_gu/frontend/templates"
 	"github.com/gorilla/context"
 	"github.com/gorilla/sessions"
 	resty "gopkg.in/resty.v1"
 )
 
-func handler(w http.ResponseWriter, r *http.Request, templateNames ...string) {
+type templateData struct {
+	User   map[string]interface{}
+	Action string
+}
+
+func buildTemplateData(w http.ResponseWriter, r *http.Request, formAction string) *templateData {
 	session := context.Get(r, "session").(*sessions.Session)
 	id := int(session.Values["id"].(float64))
 
@@ -20,16 +24,13 @@ func handler(w http.ResponseWriter, r *http.Request, templateNames ...string) {
 	if err != nil {
 		log.Printf("profile: %s", err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
-		return
+		return nil
 	}
 
-	templateData := struct {
-		User map[string]interface{}
-	}{
-		User: *user,
+	return &templateData{
+		User:   *user,
+		Action: formAction,
 	}
-
-	templates.NewRenderer(templateNames...).Do(w, r, templateData)
 }
 
 func retrieveUser(id int) (*map[string]interface{}, error) {

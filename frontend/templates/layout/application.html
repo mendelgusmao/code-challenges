@@ -4,11 +4,11 @@
   <head>
   	<meta charset="utf-8" />
   	<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script><![endif]-->
-  	<title>MeGu - {{block "title" .}} {{end}}</title>
+  	<title>MeGu - {{ block "title" . }} {{ end }}</title>
   	<meta name="keywords" content="" />
   	<meta name="description" content="" />
     <style>
-      {{block "style" .}} {{end}}
+      {{ block "style" . }} {{ end }}
     </style>
   </head>
 
@@ -43,7 +43,7 @@
           {{ end }}
           {{ end }}
 
-  				{{template "content" .}}
+  				{{ template "content" . }}
   			</main><!-- .content -->
   		</div><!-- .container-->
 
