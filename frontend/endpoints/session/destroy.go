@@ -33,5 +33,7 @@ func destroySession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session.AddFlash("Successfully logged out!")
+	session.Save(r, w)
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

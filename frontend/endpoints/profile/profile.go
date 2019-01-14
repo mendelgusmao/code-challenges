@@ -20,7 +20,7 @@ func init() {
 
 func profile(w http.ResponseWriter, r *http.Request) {
 	session := context.Get(r, "session").(*sessions.Session)
-	id := session.Values["id"].(int)
+	id := int(session.Values["id"].(float64))
 
 	user, err := retrieveUser(id)
 

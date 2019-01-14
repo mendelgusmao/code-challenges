@@ -4,20 +4,20 @@
     <div class="form-field">
       <label for="email">E-mail address</label>
       <p>
-        <input type="text" name="full_name" value="{{ .User.email }}" />
+        <input type="text" name="email" />
       </p>
     </div>
 
     <div class="form-field">
       <label for="password">Password</label>
       <p>
-        <input type="text" name="password" value="{{ .User.password }}" />
+        <input type="password" name="password" />
       </p>
     </div>
 
     <div class="form-field form-submit">
       <p>
-        <button id="update-profile" type="button">Log in</button>
+        <button id="update-profile" type="submit">Log in</button>
       </p>
 
       <div class="forgot-password">

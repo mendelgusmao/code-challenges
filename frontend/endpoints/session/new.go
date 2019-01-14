@@ -12,10 +12,10 @@ import (
 )
 
 func init() {
-	subrouter := router.Router.PathPrefix("/session").Subrouter()
+	subrouter := router.Router.PathPrefix("/session/new").Subrouter()
 
-	subrouter.HandleFunc("/new", newSession).Methods("GET")
-	subrouter.HandleFunc("/new", createSession).Methods("POST")
+	subrouter.HandleFunc("", newSession).Methods("GET")
+	subrouter.HandleFunc("", createSession).Methods("POST")
 }
 
 func newSession(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +24,8 @@ func newSession(w http.ResponseWriter, r *http.Request) {
 
 	if ok && valid.(bool) {
 		session.AddFlash("Already logged in!")
+		session.Save(r, w)
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -38,6 +40,8 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 
 	if ok && valid.(bool) {
 		session.AddFlash("Already logged in!")
+		session.Save(r, w)
+
 		http.Redirect(w, r, "/profile", http.StatusSeeOther)
 		return
 	}
@@ -66,27 +70,32 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 		session.Values["valid"] = true
 		userData := response.Result().(*map[string]interface{})
 
-		for key, value := range *userData {
-			session.Values[key] = value
-		}
+		session.Values["id"] = (*userData)["id"]
+		session.Values["email"] = (*userData)["email"]
 
-		if sessionErr := session.Save(r, w); sessionErr != nil {
-			log.Printf("sessions.createSession: %s", sessionErr)
-			session.AddFlash("Error logging in!")
+		if err := session.Save(r, w); err != nil {
+			log.Printf("sessions.createSession: %s", err)
 			http.Redirect(w, r, "/session/new", http.StatusSeeOther)
 			return
 		}
 
-		session.AddFlash("Successfully logged in!")
+		session.AddFlash("Successfully logged in. Welcome!")
+		session.Save(r, w)
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 
 	case http.StatusForbidden:
+		log.Printf("sessions.createSession: invalid credentials")
 		session.AddFlash("Couldn't log in. Check your credentials.")
+		session.Save(r, w)
+
 		http.Redirect(w, r, "/session/new", http.StatusSeeOther)
 
 	default:
 		log.Printf("sessions.createSession: backend returned %d", response.StatusCode())
 		session.AddFlash("Error logging in!")
+		session.Save(r, w)
+
 		http.Redirect(w, r, "/session/new", http.StatusSeeOther)
 	}
 }

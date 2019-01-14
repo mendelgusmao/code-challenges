@@ -20,7 +20,7 @@
   		<h1 class="title">MeGu's Application</h1>
       <div class="action">
         {{ if loggedIn }}
-          <a href="/session/destroy">Logout</a>
+          {{ email }} | <a href="/session/destroy">Logout</a>
         {{ else }}
           <a href="/session/new">Login</a>
         {{ end }}
@@ -31,6 +31,18 @@
 
   		<div class="container">
   			<main class="content">
+          {{ with flashes }}
+          {{ if . }}
+          <div class="flashes">
+            <ul>
+              {{ range . }}
+              <li>{{ . }}</li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+          {{ end }}
+
   				{{template "content" .}}
   			</main><!-- .content -->
   		</div><!-- .container-->
