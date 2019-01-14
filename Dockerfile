@@ -28,6 +28,7 @@ RUN go get -v \
     github.com/kelseyhightower/envconfig \
     github.com/satori/go.uuid \
     golang.org/x/crypto/bcrypt \
+    gopkg.in/gomail.v2 \
     gopkg.in/resty.v1
 
 ENV APPNAME=bitbucket.org/mendelgusmao/me_gu
