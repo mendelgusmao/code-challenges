@@ -1,6 +1,8 @@
-{{define "title"}}Login{{end}}
+{{define "title"}}Sign up{{end}}
 {{define "content"}}
-  <form action="/session/new" method="post">
+  <h1 class='profile-title'>Create an account</h1>
+
+  <form action="/signup" method="post">
     <div class="form-field">
       <label for="email">E-mail address</label>
       <p>
@@ -17,12 +19,8 @@
 
     <div class="form-field form-submit">
       <div>
-        <button type="submit">Log in</button>
-        or <a href="/signup">signup</a>
-
-        <div style="float: right">
-          <a href="/password/reset" class="forgot-password-message">Forgot your password?</a>
-        </div>
+        <button type="submit">Create profile</button>
+        or <a href="/session/new">login</a>
       </div>
     </div>
   </form>
