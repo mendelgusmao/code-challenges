@@ -1,0 +1,24 @@
+{{define "title"}}Forgot password{{end}}
+{{define "content"}}
+  <h1 class='profile-title'>Forgot password</h1>
+
+  <p>
+    Enter your e-mail below and click submit. <br />
+    If an account with this address exists, we'll send you a link to reset your password.
+  </p>
+
+  <form action="/forgot-password" method="post">
+    <div class="form-field">
+      <label for="email">E-mail address</label>
+      <p>
+        <input type="text" name="email" />
+      </p>
+    </div>
+
+    <div class="form-field form-submit">
+      <div>
+        <button type="submit">Send reset e-mail</button>
+      </div>
+    </div>
+  </form>
+{{end}}
