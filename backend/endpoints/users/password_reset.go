@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"bitbucket.org/mendelgusmao/me_gu/backend/services"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
@@ -48,6 +49,14 @@ func createPasswordResetRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := userDAO.updatePasswordResetToken(user.Email, token.String()); err != nil {
+		log.Printf("createPasswordResetRequest: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		return
+	}
+
+	passwordReset := services.PasswordReset{}
+
+	if err := passwordReset.SendEmail(user.Email, token.String()); err != nil {
 		log.Printf("createPasswordResetRequest: %s", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
