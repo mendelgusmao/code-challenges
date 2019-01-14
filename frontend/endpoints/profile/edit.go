@@ -35,10 +35,12 @@ func update(w http.ResponseWriter, r *http.Request) {
 		Email     string `json:"email"`
 		FullName  string `json:"full_name"`
 		Telephone string `json:"telephone"`
+		Address   string `json:"address"`
 	}{
 		Email:     r.FormValue("email"),
 		FullName:  r.FormValue("full_name"),
 		Telephone: r.FormValue("telephone"),
+		Address:   r.FormValue("address"),
 	}
 
 	response, err := resty.R().

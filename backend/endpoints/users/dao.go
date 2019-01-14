@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	sqlFields      = "id, email, full_name, telephone, password, password_reset_token, password_reset_token_expiration"
+	sqlFields      = "id, email, full_name, telephone, address, password, password_reset_token, password_reset_token_expiration"
 	sqlFindByID    = "SELECT " + sqlFields + " FROM users WHERE id = ?"
 	sqlFindByEmail = "SELECT " + sqlFields + " FROM users WHERE email = ?"
 	sqlFindByToken = "SELECT " + sqlFields + " FROM users WHERE password_reset_token = ?"
-	sqlInsert      = "INSERT INTO users (email, full_name, telephone, password) VALUES (?, ?, ?, ?)"
-	sqlUpdate      = "UPDATE users SET email = ?, full_name = ?, telephone = ?, password = ?, " +
-		"password_reset_token = ?, password_reset_token_expiration = ? WHERE id = ?"
+	sqlInsert      = "INSERT INTO users (email, full_name, telephone, address, password) VALUES (?, ?, ?, ?, ?)"
+	sqlUpdate      = "UPDATE users SET email = ?, full_name = ?, telephone = ?, address = ?, " +
+		"password = ?, password_reset_token = ?, password_reset_token_expiration = ? WHERE id = ?"
 	sqlUpdateToken = "UPDATE users SET password_reset_token = ?, password_reset_token_expiration = ? WHERE email = ?"
 )
 
@@ -64,6 +64,7 @@ func (d *dao) create(u *User) error {
 		u.Email,
 		u.FullName,
 		u.Telephone,
+		u.Address,
 		u.Password,
 	)
 
@@ -87,6 +88,7 @@ func (d *dao) update(u *User) error {
 		u.Email,
 		u.FullName,
 		u.Telephone,
+		u.Address,
 		u.Password,
 		u.PasswordResetToken,
 		u.PasswordResetTokenExpiration,
@@ -124,6 +126,7 @@ func scanOne(row *sql.Row) (*User, error) {
 		&user.Email,
 		&user.FullName,
 		&user.Telephone,
+		&user.Address,
 		&user.Password,
 		&user.PasswordResetToken,
 		&user.PasswordResetTokenExpiration,

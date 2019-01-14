@@ -13,6 +13,7 @@ type User struct {
 	Email                        string     `json:"email"`
 	FullName                     string     `json:"full_name"`
 	Telephone                    string     `json:"telephone"`
+	Address                      string     `json:"address"`
 	Password                     string     `json:"password,omitempty"`
 	PasswordResetToken           *string    `json:"-"`
 	PasswordResetTokenExpiration *time.Time `json:"-"`
@@ -24,6 +25,7 @@ func (u *User) apply(r *UserRequest) {
 	u.Email = r.Email
 	u.FullName = r.FullName
 	u.Telephone = r.Telephone
+	u.Address = r.Address
 	u.PasswordResetToken = r.PasswordResetToken
 	u.PasswordResetTokenExpiration = r.PasswordResetTokenExpiration
 
@@ -52,6 +54,7 @@ func (u *User) filtered() User {
 		Email:     u.Email,
 		FullName:  u.FullName,
 		Telephone: u.Telephone,
+		Address:   u.Address,
 	}
 }
 
