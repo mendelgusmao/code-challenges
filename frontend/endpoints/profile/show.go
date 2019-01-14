@@ -11,9 +11,9 @@ func init() {
 	subrouter := router.Router.PathPrefix("/profile").Subrouter()
 	subrouter.Use(middleware.RequireSession)
 
-	subrouter.HandleFunc("/edit", edit).Methods("GET")
+	subrouter.HandleFunc("", show).Methods("GET")
 }
 
-func edit(w http.ResponseWriter, r *http.Request) {
-	handler(w, r, "profile/edit")
+func show(w http.ResponseWriter, r *http.Request) {
+	handler(w, r, "profile/show")
 }
