@@ -91,12 +91,13 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 	user, err := userDAO.findByID(id)
 
 	if err != nil {
+		log.Printf("getUser: %s", err)
+
 		if err == sql.ErrNoRows {
 			http.Error(w, "", http.StatusNotFound)
 			return
 		}
 
-		log.Printf("getUser: %s", err)
 		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}

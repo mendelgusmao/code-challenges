@@ -36,7 +36,13 @@ func createPasswordResetRequest(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Printf("createPasswordResetRequest: %s", err)
-		http.Error(w, "", http.StatusNotFound)
+
+		if err == sql.ErrNoRows {
+			http.Error(w, "", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
@@ -73,8 +79,14 @@ func checkPasswordResetTokenValidity(w http.ResponseWriter, r *http.Request) {
 	user, err := userDAO.findByToken(token)
 
 	if err != nil {
-		log.Printf("checkPasswordResetTokenValidity: %s", err)
-		http.Error(w, "", http.StatusNotFound)
+		log.Printf("createPasswordResetRequest: %s", err)
+
+		if err == sql.ErrNoRows {
+			http.Error(w, "", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
@@ -104,9 +116,15 @@ func updatePassword(w http.ResponseWriter, r *http.Request) {
 
 	user, err := userDAO.findByToken(credentials.Token)
 
-	if err != nil || user == nil {
-		log.Printf("updatePassword: %s", err)
-		http.Error(w, "", http.StatusForbidden)
+	if err != nil {
+		log.Printf("createPasswordResetRequest: %s", err)
+
+		if err == sql.ErrNoRows {
+			http.Error(w, "", http.StatusNotFound)
+			return
+		}
+
+		http.Error(w, "", http.StatusInternalServerError)
 		return
 	}
 
