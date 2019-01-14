@@ -12,7 +12,7 @@ const (
 	sqlFindByID    = "SELECT " + sqlFields + " FROM users WHERE id = ?"
 	sqlFindByEmail = "SELECT " + sqlFields + " FROM users WHERE email = ?"
 	sqlFindByToken = "SELECT " + sqlFields + " FROM users WHERE password_reset_token = ?"
-	sqlInsert      = "INSERT INTO users (email, full_name, telephone, password) VALUES (?, ?, ?, ?, ?, ?)"
+	sqlInsert      = "INSERT INTO users (email, full_name, telephone, password) VALUES (?, ?, ?, ?)"
 	sqlUpdate      = "UPDATE users SET email = ?, full_name = ?, telephone = ?, password = ?, " +
 		"password_reset_token = ?, password_reset_token_expiration = ? WHERE id = ?"
 	sqlUpdateToken = "UPDATE users SET password_reset_token = ?, password_reset_token_expiration = ? WHERE email = ?"

@@ -53,6 +53,12 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if u, _ := userDAO.findByEmail(userRequest.Email); u != nil {
+		log.Printf("createUser: email in use")
+		http.Error(w, "", http.StatusConflict)
+		return
+	}
+
 	if errs := userRequest.validate(); errs != nil {
 		// TODO
 	}
@@ -72,6 +78,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(user.filtered())
 }
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
