@@ -30,7 +30,7 @@ func newSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.Render(w, r, "session/new", nil)
+	templates.NewRenderer("session/new").Do(w, r, nil)
 }
 
 func createSession(w http.ResponseWriter, r *http.Request) {

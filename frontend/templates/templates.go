@@ -35,8 +35,16 @@ func loadLayoutTemplates(c *config.Specification) error {
 	return nil
 }
 
-func Render(w http.ResponseWriter, r *http.Request, name string, data interface{}) {
-	t, ok := templates[name]
+type renderer struct {
+	templateNames []string
+}
+
+func NewRenderer(templateNames ...string) renderer {
+	return renderer{templateNames: templateNames}
+}
+
+func (rd renderer) Do(w http.ResponseWriter, r *http.Request, data interface{}) {
+	t, ok := templates[rd.templateNames[0]]
 
 	if !ok {
 		layout, err := layoutTemplate.Clone()
@@ -46,16 +54,22 @@ func Render(w http.ResponseWriter, r *http.Request, name string, data interface{
 			http.Error(w, "", http.StatusInternalServerError)
 		}
 
+		files := make([]string, len(rd.templateNames))
+
+		for index, name := range rd.templateNames {
+			files[index] = path.Join(config.Frontend.TemplatesDir, name+extension)
+		}
+
 		t, err = layout.
 			Funcs(funcMap(w, r)).
-			ParseFiles(path.Join(config.Frontend.TemplatesDir, name+extension))
+			ParseFiles(files...)
 
 		if err != nil {
 			log.Printf("template.Render: %s", err)
 			http.Error(w, "", http.StatusInternalServerError)
 		}
 
-		templates[name] = t
+		templates[rd.templateNames[0]] = t
 	}
 
 	if err := t.Funcs(funcMap(w, r)).ExecuteTemplate(w, "application", data); err != nil {

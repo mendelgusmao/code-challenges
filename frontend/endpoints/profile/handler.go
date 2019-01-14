@@ -11,7 +11,7 @@ import (
 	resty "gopkg.in/resty.v1"
 )
 
-func handler(w http.ResponseWriter, r *http.Request, templateName string) {
+func handler(w http.ResponseWriter, r *http.Request, templateNames ...string) {
 	session := context.Get(r, "session").(*sessions.Session)
 	id := int(session.Values["id"].(float64))
 
@@ -29,7 +29,7 @@ func handler(w http.ResponseWriter, r *http.Request, templateName string) {
 		User: *user,
 	}
 
-	templates.Render(w, r, templateName, templateData)
+	templates.NewRenderer(templateNames...).Do(w, r, templateData)
 }
 
 func retrieveUser(id int) (*map[string]interface{}, error) {

@@ -20,7 +20,7 @@ func init() {
 }
 
 func showDestroySession(w http.ResponseWriter, r *http.Request) {
-	templates.Render(w, r, "session/destroy", nil)
+	templates.NewRenderer("session/destroy").Do(w, r, nil)
 }
 
 func destroySession(w http.ResponseWriter, r *http.Request) {
