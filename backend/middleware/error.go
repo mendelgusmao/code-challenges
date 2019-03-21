@@ -11,7 +11,7 @@ type errorMessage struct {
 	Error string `json:"error"`
 }
 
-type ErrorFunc func(status int, message string)
+type ErrorFunc func(int, string)
 
 func Error(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/context"
 )
 
-type JSONDecoderFunc func(target interface{}) bool
+type JSONDecoderFunc func(interface{}) bool
 
 func JSONDecoder(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

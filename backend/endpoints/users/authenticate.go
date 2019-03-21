@@ -4,16 +4,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/context"
-	"github.com/mendelgusmao/supereasy/backend/config"
 	"github.com/mendelgusmao/supereasy/backend/middleware"
 	"github.com/mendelgusmao/supereasy/backend/router"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func init() {
-	router.Router.HandleFunc("/users/authenticate", authenticateUser).Methods("POST")
+	subrouter := router.Router.PathPrefix("/users/authenticate").Subrouter()
+	subrouter.Use(middleware.GenerateToken)
+
+	subrouter.HandleFunc("", authenticateUser).Methods("POST")
 }
 
 func authenticateUser(w http.ResponseWriter, r *http.Request) {
@@ -48,19 +49,6 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user": user.ID,
-	})
-
-	tokenString, err := token.SignedString([]byte(config.Backend.JWTSecret))
-
-	if err != nil {
-		log.Printf("authenticateUser: %s", err)
-		error(http.StatusInternalServerError, "error generating token")
-
-		return
-	}
-
-	w.Header().Add("Authorization", tokenString)
-	w.WriteHeader(http.StatusNoContent)
+	generateToken := context.Get(r, "generateToken").(middleware.GenerateTokenFunc)
+	generateToken(user.ID)
 }
