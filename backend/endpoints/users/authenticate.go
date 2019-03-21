@@ -14,10 +14,10 @@ func init() {
 	subrouter := router.Router.PathPrefix("/users/authenticate").Subrouter()
 	subrouter.Use(middleware.GenerateToken)
 
-	subrouter.HandleFunc("", authenticateUser).Methods("POST")
+	subrouter.HandleFunc("", authenticate).Methods("POST")
 }
 
-func authenticateUser(w http.ResponseWriter, r *http.Request) {
+func authenticate(w http.ResponseWriter, r *http.Request) {
 	db := context.Get(r, "db").(*mongo.Database)
 	jsonDecoder := context.Get(r, "jsonDecoder").(middleware.JSONDecoderFunc)
 	error := context.Get(r, "error").(middleware.ErrorFunc)
@@ -36,7 +36,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 	user, err := dao.findByEmailAndPassword(credentials.Email, credentials.Password)
 
 	if err != nil {
-		log.Printf("authenticateUser: %s", err)
+		log.Printf("users.authenticate: %s", err)
 
 		if err == mongo.ErrNoDocuments {
 			error(http.StatusUnauthorized, "wrong email and password combination")
