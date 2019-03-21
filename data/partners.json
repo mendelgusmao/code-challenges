@@ -1,0 +1,331 @@
+[
+  {
+    "id": "cjsgiytw30000enwg26h7aest",
+    "name": "Suélen Souza",
+    "location": {
+      "name": "Pedra Careca Restaurante",
+      "address": "Praia da Joaquina, 2500",
+      "city": "Florianópolis ",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.6343625,
+      "long": -48.4542951
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw40001enwgfx7w90kz",
+    "name": "Mércia Oliveira",
+    "location": {
+      "name": "Beco do Batman",
+      "address": "R. Gonçalo Afonso - Vila Madalena",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5566759,
+      "long": -46.6857404
+    },
+    "availableServices": [
+      "OIL_CHANGE",
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw40002enwg0qwgg512",
+    "name": "Félix Franco",
+    "location": {
+      "name": "Centro de Convenções Arquiteto Rubens Gil de Camillo",
+      "address": "Av. Waldir dos Santos Pereira, s/n - Parque dos Poderes",
+      "city": "Campo Grande",
+      "state": "MS",
+      "country": "Brazil",
+      "lat": -20.4504541,
+      "long": -54.557574
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw40003enwgfcx5gsn9",
+    "name": "Feliciano Barros",
+    "location": {
+      "name": "MASP",
+      "address": "Av. Paulista, 1578 - Bela Vista",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5609048,
+      "long": -46.6849555
+    },
+    "availableServices": [
+      "DRY_WASHING",
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw40004enwg68ufh5wy",
+    "name": "Fábio Barros",
+    "location": {
+      "name": "Beco do Batman",
+      "address": "R. Gonçalo Afonso - Vila Madalena",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5566759,
+      "long": -46.6857404
+    },
+    "availableServices": [
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw40005enwg0pwl3nb9",
+    "name": "Lucas Moreira",
+    "location": {
+      "name": "Jardim Botanico",
+      "address": "R. Engo. Ostoja Roguski - Jardim Botânico",
+      "city": "Curitiba",
+      "state": "PR",
+      "country": "Brazil",
+      "lat": -25.42778,
+      "long": -49.27306
+    },
+    "availableServices": [
+      "OIL_CHANGE",
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw40006enwge0ushrqx",
+    "name": "Karla Albuquerque",
+    "location": {
+      "name": "Shopping Plaza Sul",
+      "address": "Praça Leonor Kaupa, 100 - Jardim da Saúde",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.619575,
+      "long": -46.627023
+    },
+    "availableServices": [
+      "OIL_CHANGE",
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw50007enwg61mje0qb",
+    "name": "Antônio Franco",
+    "location": {
+      "name": "Teatro Amazonas",
+      "address": "Avenida Eduardo Ribeiro, Centro",
+      "city": "Manaus",
+      "state": "AM",
+      "country": "Brazil",
+      "lat": -3.10194,
+      "long": -60.025
+    },
+    "availableServices": [
+      "DRY_WASHING",
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw50008enwgfx8ratik",
+    "name": "Antônio Braga",
+    "location": {
+      "name": "MASP",
+      "address": "Av. Paulista, 1578 - Bela Vista",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5609048,
+      "long": -46.6849555
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw50009enwg6ige96b4",
+    "name": "Alessandro Braga",
+    "location": {
+      "name": "Beco do Batman",
+      "address": "R. Gonçalo Afonso - Vila Madalena",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5566759,
+      "long": -46.6857404
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000aenwgbgxs2r10",
+    "name": "Marcela Xavier",
+    "location": {
+      "name": "Arena Caixa - Centro de Atletismo Professor Oswaldo Terra",
+      "address": "R. Tiradentes, 1845 - Santa Terezinha",
+      "city": "São Bernardo do Campo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.725778,
+      "long": -46.532081
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000benwg83v2h8ll",
+    "name": "Rafael Carvalho",
+    "location": {
+      "name": "Museu de Armas Major Lara Ribas",
+      "address": "Av. Osvaldo Rodrigues Cabral, 525 - Centro",
+      "city": "Florianópolis",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.5944704,
+      "long": -48.561893
+    },
+    "availableServices": [
+      "OIL_CHANGE",
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000cenwg02sph3ih",
+    "name": "Fábio Silva",
+    "location": {
+      "name": "MASP",
+      "address": "Av. Paulista, 1578 - Bela Vista",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5609048,
+      "long": -46.6849555
+    },
+    "availableServices": [
+      "DRY_WASHING",
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000denwg8wwhg0a1",
+    "name": "Danilo Nogueira",
+    "location": {
+      "name": "Museu de Armas Major Lara Ribas",
+      "address": "Av. Osvaldo Rodrigues Cabral, 525 - Centro",
+      "city": "Florianópolis",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.5944704,
+      "long": -48.561893
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000eenwga5xf5akk",
+    "name": "Larissa Costa",
+    "location": {
+      "name": "Beco do Batman",
+      "address": "R. Gonçalo Afonso - Vila Madalena",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5566759,
+      "long": -46.6857404
+    },
+    "availableServices": [
+      "DRY_WASHING",
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000fenwg8nq02y37",
+    "name": "Paulo Melo",
+    "location": {
+      "name": "Museu de Armas Major Lara Ribas",
+      "address": "Av. Osvaldo Rodrigues Cabral, 525 - Centro",
+      "city": "Florianópolis",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.5944704,
+      "long": -48.561893
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000genwg8sy20wfs",
+    "name": "Dalila Macedo",
+    "location": {
+      "name": "Museu de Armas Major Lara Ribas",
+      "address": "Av. Osvaldo Rodrigues Cabral, 525 - Centro",
+      "city": "Florianópolis",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.5944704,
+      "long": -48.561893
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000henwgh1yy41o1",
+    "name": "Lorena Xavier",
+    "location": {
+      "name": "MASP",
+      "address": "Av. Paulista, 1578 - Bela Vista",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.5609048,
+      "long": -46.6849555
+    },
+    "availableServices": [
+      "OIL_CHANGE",
+      "DRY_WASHING"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000ienwg4qsdednu",
+    "name": "Rafaela Carvalho",
+    "location": {
+      "name": "Museu de Armas Major Lara Ribas",
+      "address": "Av. Osvaldo Rodrigues Cabral, 525 - Centro",
+      "city": "Florianópolis",
+      "state": "SC",
+      "country": "Brazil",
+      "lat": -27.5944704,
+      "long": -48.561893
+    },
+    "availableServices": [
+      "OIL_CHANGE"
+    ]
+  },
+  {
+    "id": "cjsgiytw5000jenwg8s1nc9qv",
+    "name": "Dalila Martins",
+    "location": {
+      "name": "Arena Caixa - Centro de Atletismo Professor Oswaldo Terra",
+      "address": "R. Tiradentes, 1845 - Santa Terezinha",
+      "city": "São Bernardo do Campo",
+      "state": "SP",
+      "country": "Brazil",
+      "lat": -23.725778,
+      "long": -46.532081
+    },
+    "availableServices": [
+      "DRY_WASHING"
+    ]
+  }
+]
