@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/context"
+	"github.com/mendelgusmao/supereasy/backend/config"
 	"github.com/mendelgusmao/supereasy/backend/endpoints/messages"
 	"github.com/mendelgusmao/supereasy/backend/router"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -32,7 +34,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := dao.findByEmailAndPassword(credentials.Email, credentials.Password)
+	user, err := dao.findByEmailAndPassword(credentials.Email, credentials.Password)
 
 	if err != nil {
 		log.Printf("authenticateUser: %s", err)
@@ -50,5 +52,20 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user": user.ID,
+	})
+
+	tokenString, err := token.SignedString([]byte(config.Backend.JWTSecret))
+
+	if err != nil {
+		log.Printf("authenticateUser: %s", err)
+		http.Error(w, "", http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(messages.Error{Error: "error generating token"})
+
+		return
+	}
+
+	w.Header().Add("Authorization", tokenString)
 	w.WriteHeader(http.StatusNoContent)
 }

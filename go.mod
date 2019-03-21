@@ -3,6 +3,7 @@ module github.com/mendelgusmao/supereasy
 go 1.12
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.2.0 // indirect

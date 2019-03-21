@@ -12,6 +12,7 @@ type Specification struct {
 	Address      string `default:":8080"`
 	DatabaseURL  string `required:"true"`
 	DatabaseName string `required:"true"`
+	JWTSecret    string `required:"true"`
 }
 
 func Load() error {
