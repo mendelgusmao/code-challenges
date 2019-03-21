@@ -1,14 +1,13 @@
 package users
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/context"
 	"github.com/mendelgusmao/supereasy/backend/config"
-	"github.com/mendelgusmao/supereasy/backend/endpoints/messages"
+	"github.com/mendelgusmao/supereasy/backend/middleware"
 	"github.com/mendelgusmao/supereasy/backend/router"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -19,6 +18,9 @@ func init() {
 
 func authenticateUser(w http.ResponseWriter, r *http.Request) {
 	db := context.Get(r, "db").(*mongo.Database)
+	jsonDecoder := context.Get(r, "jsonDecoder").(middleware.JSONDecoderFunc)
+	error := context.Get(r, "error").(middleware.ErrorFunc)
+
 	dao := newDAO(db)
 
 	credentials := struct {
@@ -26,11 +28,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		Password string `json:"password"`
 	}{}
 
-	if err := json.NewDecoder(r.Body).Decode(&credentials); err != nil {
-		log.Printf("authenticateUser: %s", err)
-		http.Error(w, "", http.StatusBadRequest)
-		json.NewEncoder(w).Encode(messages.Error{Error: "invalid payload"})
-
+	if !jsonDecoder(&credentials) {
 		return
 	}
 
@@ -40,14 +38,12 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("authenticateUser: %s", err)
 
 		if err == mongo.ErrNoDocuments {
-			http.Error(w, "", http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(messages.Error{Error: "wrong email and password combination"})
+			error(http.StatusUnauthorized, "wrong email and password combination")
 
 			return
 		}
 
-		http.Error(w, "", http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(messages.Error{Error: "unexpected error"})
+		error(http.StatusInternalServerError, "unexpected error")
 
 		return
 	}
@@ -60,8 +56,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Printf("authenticateUser: %s", err)
-		http.Error(w, "", http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(messages.Error{Error: "error generating token"})
+		error(http.StatusInternalServerError, "error generating token")
 
 		return
 	}
