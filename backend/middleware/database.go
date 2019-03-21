@@ -1,13 +1,16 @@
 package middleware
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 
-	"github.com/gorilla/context"
+	gorillaContext "github.com/gorilla/context"
 	"github.com/mendelgusmao/supereasy/backend/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 func Database(next http.Handler) http.Handler {
@@ -17,12 +20,34 @@ func Database(next http.Handler) http.Handler {
 		if err != nil {
 			log.Printf("middleware.Database: %s\n", err)
 			http.Error(w, "", http.StatusInternalServerError)
+
 			return
 		}
 
-		db := client.Database(config.Backend.DatabaseName)
-		context.Set(r, "db", &db)
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
 
+		db := client.Database(config.Backend.DatabaseName)
+
+		if err := client.Connect(ctx); err != nil {
+			log.Printf("middleware.Database: %s\n", err)
+			http.Error(w, "", http.StatusInternalServerError)
+
+			return
+		}
+
+		ctxPing, cancelPing := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancelPing()
+
+		if err := client.Ping(ctxPing, readpref.Primary()); err != nil {
+			log.Printf("middleware.Database: %s\n", err)
+			http.Error(w, "", http.StatusInternalServerError)
+
+			return
+		}
+
+		gorillaContext.Set(r, "db", db)
 		next.ServeHTTP(w, r)
+		client.Disconnect(ctx)
 	})
 }
