@@ -36,6 +36,21 @@ func (d *dao) findByLocationAndService(service string, lat, long float64, distan
 	})
 }
 
+func (d *dao) findByLocation(lat, long float64, distance float64) ([]Partner, error) {
+	radianDistance := distance / earthRadius
+
+	return d.find(bson.M{
+		"location.geo": bson.M{
+			"$geoWithin": bson.M{
+				"$centerSphere": bson.A{
+					bson.A{lat, long},
+					radianDistance,
+				},
+			},
+		},
+	})
+}
+
 func (d *dao) find(filter interface{}) ([]Partner, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

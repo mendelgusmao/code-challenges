@@ -17,3 +17,15 @@ type Partner struct {
 		Long    float64 `bson:"long" json:"long"`
 	} `bson:"location" json:"location"`
 }
+
+type SimplifiedPartner struct {
+	Name              string   `bson:"name" json:"name"`
+	AvailableServices []string `bson:"availableServices" json:"availableServices"`
+}
+
+func (p Partner) Simplified() SimplifiedPartner {
+	return SimplifiedPartner{
+		Name:              p.Name,
+		AvailableServices: p.AvailableServices,
+	}
+}

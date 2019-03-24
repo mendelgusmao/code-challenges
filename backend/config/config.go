@@ -9,10 +9,11 @@ import (
 var Backend = Specification{}
 
 type Specification struct {
-	Address      string `default:":8080"`
-	DatabaseURL  string `required:"true"`
-	DatabaseName string `required:"true"`
-	JWTSecret    string `required:"true"`
+	Address          string `default:":8080"`
+	DatabaseURL      string `required:"true"`
+	DatabaseName     string `required:"true"`
+	JWTSecret        string `required:"true"`
+	LocationIQAPIKey string `required:"true"`
 }
 
 func Load() error {
