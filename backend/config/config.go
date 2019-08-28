@@ -9,7 +9,8 @@ import (
 var Backend Specification
 
 type Specification struct {
-	Address string `default:":9091"`
+	Address  string `default:":9091"`
+	Database string `default:"carpooling.boltdb"`
 }
 
 var hooks []func(Specification) error

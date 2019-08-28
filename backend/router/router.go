@@ -12,4 +12,5 @@ func init() {
 	Router.Use(middleware.ContentType("application/json; charset=utf-8"))
 	Router.Use(middleware.Logging)
 	Router.Use(middleware.JSONDecoder)
+	Router.Use(middleware.Database)
 }
