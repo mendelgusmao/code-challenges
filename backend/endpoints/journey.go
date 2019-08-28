@@ -11,33 +11,22 @@ import (
 )
 
 func init() {
-	router.Router.HandleFunc("/cars", putCars).Methods("PUT")
+	router.Router.HandleFunc("/journey", postJourney).Methods("POST")
 }
 
-func putCars(w http.ResponseWriter, r *http.Request) {
+func postJourney(w http.ResponseWriter, r *http.Request) {
 	jsonDecoder := context.Get(r, "jsonDecoder").(middleware.JSONDecoderFunc)
 	db := context.Get(r, "db").(*bbolt.DB)
-	carsService := services.NewCarsService(db)
 	journeysService := services.NewJourneysService(db)
 
-	cars := []services.Car{}
+	journey := services.Journey{}
 
-	if jsonDecoder(&cars) {
-		if err := journeysService.Clear(); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		if err := carsService.Clear(); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		if err := carsService.Put(cars); err != nil {
+	if jsonDecoder(&journey) {
+		if err := journeysService.Insert(journey); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusAccepted)
 }
