@@ -65,3 +65,32 @@ func (s *carsService) Put(cars []Car) error {
 		return nil
 	})
 }
+
+func (s *carsService) Find(carID int) (Car, error) {
+	var car Car
+
+	err := s.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket([]byte(carsBucket))
+
+		carData := bucket.Get([]byte(fmt.Sprintf("%d", carID)))
+
+		if carData == nil {
+			return errors.Wrapf(errNotFound, "car#%d", carID)
+		}
+
+		buffer := bytes.NewBuffer(carData)
+		decoder := gob.NewDecoder(buffer)
+
+		if err := decoder.Decode(&car); err != nil {
+			return errors.Wrapf(err, "finding car: decoding car#%d", carID)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return car, err
+	}
+
+	return car, nil
+}
