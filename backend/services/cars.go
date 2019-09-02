@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"log"
 
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
-
-const carsBucket = "cars"
 
 type Car struct {
 	ID    int `json:"id"`
@@ -17,18 +16,20 @@ type Car struct {
 }
 
 type CarsService struct {
-	db *bbolt.DB
+	db     *bbolt.DB
+	bucket []byte
 }
 
 func NewCarsService(db *bbolt.DB) *CarsService {
 	return &CarsService{
-		db: db,
+		db:     db,
+		bucket: []byte("cars"),
 	}
 }
 
 func (s *CarsService) Clear() error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		if err := tx.DeleteBucket([]byte(carsBucket)); err != nil {
+		if err := tx.DeleteBucket([]byte(s.bucket)); err != nil {
 			return errors.Wrap(err, "clearing cars")
 		}
 
@@ -38,7 +39,7 @@ func (s *CarsService) Clear() error {
 
 func (s *CarsService) Put(cars []Car) error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists([]byte(carsBucket))
+		bucket, err := tx.CreateBucketIfNotExists([]byte(s.bucket))
 
 		if err != nil {
 			return errors.Wrap(err, "putting cars")
@@ -70,7 +71,7 @@ func (s *CarsService) Find(carID int) (Car, error) {
 	var car Car
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(carsBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
 
 		carData := bucket.Get([]byte(fmt.Sprintf("%d", carID)))
 
@@ -99,7 +100,12 @@ func (s *CarsService) All() ([]Car, error) {
 	var cars []Car
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(tripBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
+
+		if bucket == nil {
+			log.Printf("bucket '%s' doesnt exist yet", s.bucket)
+			return nil
+		}
 
 		cursor := bucket.Cursor()
 

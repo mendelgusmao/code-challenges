@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"log"
 
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
-
-const journeyBucket = "journeys"
 
 var errNotFound = errors.New("object not found")
 
@@ -19,18 +18,20 @@ type Journey struct {
 }
 
 type JourneysService struct {
-	db *bbolt.DB
+	db     *bbolt.DB
+	bucket []byte
 }
 
 func NewJourneysService(db *bbolt.DB) *JourneysService {
 	return &JourneysService{
-		db: db,
+		db:     db,
+		bucket: []byte("journeys"),
 	}
 }
 
 func (s *JourneysService) Clear() error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		if err := tx.DeleteBucket([]byte(journeyBucket)); err != nil {
+		if err := tx.DeleteBucket([]byte(s.bucket)); err != nil {
 			return errors.Wrap(err, "clearing journey")
 		}
 
@@ -40,7 +41,7 @@ func (s *JourneysService) Clear() error {
 
 func (s *JourneysService) Insert(journey Journey) error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists([]byte(journeyBucket))
+		bucket, err := tx.CreateBucketIfNotExists([]byte(s.bucket))
 
 		if err != nil {
 			return errors.Wrap(err, "putting journey")
@@ -70,7 +71,12 @@ func (s *JourneysService) Find(journeyID int) (Journey, error) {
 	var journey Journey
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(journeyBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
+
+		if bucket == nil {
+			log.Printf("bucket '%s' doesnt exist yet", s.bucket)
+			return nil
+		}
 
 		journeyData := bucket.Get([]byte(fmt.Sprintf("%d", journeyID)))
 
@@ -99,7 +105,12 @@ func (s *JourneysService) All() ([]Journey, error) {
 	var journeys []Journey
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(tripBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
+
+		if bucket == nil {
+			log.Printf("bucket '%s' doesnt exist yet", s.bucket)
+			return nil
+		}
 
 		cursor := bucket.Cursor()
 

@@ -4,12 +4,11 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	"log"
 
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
-
-const tripBucket = "trips"
 
 type Trip struct {
 	ID        int `json:"id"`
@@ -18,18 +17,20 @@ type Trip struct {
 }
 
 type TripsService struct {
-	db *bbolt.DB
+	db     *bbolt.DB
+	bucket []byte
 }
 
 func NewTripsService(db *bbolt.DB) *TripsService {
 	return &TripsService{
-		db: db,
+		db:     db,
+		bucket: []byte("trips"),
 	}
 }
 
 func (s *TripsService) Clear() error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		if err := tx.DeleteBucket([]byte(tripBucket)); err != nil {
+		if err := tx.DeleteBucket([]byte(s.bucket)); err != nil {
 			return errors.Wrap(err, "clearing trip")
 		}
 
@@ -39,7 +40,7 @@ func (s *TripsService) Clear() error {
 
 func (s *TripsService) Insert(trip Trip) error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists([]byte(tripBucket))
+		bucket, err := tx.CreateBucketIfNotExists([]byte(s.bucket))
 
 		if err != nil {
 			return errors.Wrap(err, "putting trip")
@@ -69,7 +70,12 @@ func (s *TripsService) FindByJourneyID(journeyID int) (Trip, error) {
 	var trip Trip
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(tripBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
+
+		if bucket == nil {
+			log.Printf("bucket '%s' doesnt exist yet", s.bucket)
+			return nil
+		}
 
 		cursor := bucket.Cursor()
 
@@ -100,7 +106,7 @@ func (s *TripsService) FindByCarID(carID int) ([]Trip, error) {
 	var trips []Trip
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(tripBucket))
+		bucket := tx.Bucket([]byte(s.bucket))
 
 		cursor := bucket.Cursor()
 
