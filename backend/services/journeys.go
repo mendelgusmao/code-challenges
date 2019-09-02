@@ -18,17 +18,17 @@ type Journey struct {
 	People int `json:"people"`
 }
 
-type journeysService struct {
+type JourneysService struct {
 	db *bbolt.DB
 }
 
-func NewJourneysService(db *bbolt.DB) *journeysService {
-	return &journeysService{
+func NewJourneysService(db *bbolt.DB) *JourneysService {
+	return &JourneysService{
 		db: db,
 	}
 }
 
-func (s *journeysService) Clear() error {
+func (s *JourneysService) Clear() error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
 		if err := tx.DeleteBucket([]byte(journeyBucket)); err != nil {
 			return errors.Wrap(err, "clearing journey")
@@ -38,7 +38,7 @@ func (s *journeysService) Clear() error {
 	})
 }
 
-func (s *journeysService) Insert(journey Journey) error {
+func (s *JourneysService) Insert(journey Journey) error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
 		bucket, err := tx.CreateBucketIfNotExists([]byte(journeyBucket))
 
@@ -66,7 +66,7 @@ func (s *journeysService) Insert(journey Journey) error {
 	})
 }
 
-func (s *journeysService) Find(journeyID int) (Journey, error) {
+func (s *JourneysService) Find(journeyID int) (Journey, error) {
 	var journey Journey
 
 	err := s.db.View(func(tx *bbolt.Tx) error {

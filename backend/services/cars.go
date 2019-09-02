@@ -16,17 +16,17 @@ type Car struct {
 	Seats int `json:"seats"`
 }
 
-type carsService struct {
+type CarsService struct {
 	db *bbolt.DB
 }
 
-func NewCarsService(db *bbolt.DB) *carsService {
-	return &carsService{
+func NewCarsService(db *bbolt.DB) *CarsService {
+	return &CarsService{
 		db: db,
 	}
 }
 
-func (s *carsService) Clear() error {
+func (s *CarsService) Clear() error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
 		if err := tx.DeleteBucket([]byte(carsBucket)); err != nil {
 			return errors.Wrap(err, "clearing cars")
@@ -36,7 +36,7 @@ func (s *carsService) Clear() error {
 	})
 }
 
-func (s *carsService) Put(cars []Car) error {
+func (s *CarsService) Put(cars []Car) error {
 	return s.db.Update(func(tx *bbolt.Tx) error {
 		bucket, err := tx.CreateBucketIfNotExists([]byte(carsBucket))
 
@@ -66,7 +66,7 @@ func (s *carsService) Put(cars []Car) error {
 	})
 }
 
-func (s *carsService) Find(carID int) (Car, error) {
+func (s *CarsService) Find(carID int) (Car, error) {
 	var car Car
 
 	err := s.db.View(func(tx *bbolt.Tx) error {
