@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/kelseyhightower/envconfig"
 )
@@ -9,8 +10,9 @@ import (
 var Backend Specification
 
 type Specification struct {
-	Address  string `default:":9091"`
-	Database string `default:"carpooling.boltdb"`
+	Address           string        `default:":9091"`
+	Database          string        `default:"carpooling.boltdb"`
+	TripMakerInterval time.Duration `default:"1s"`
 }
 
 var hooks []func(Specification) error
