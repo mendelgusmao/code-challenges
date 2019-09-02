@@ -94,3 +94,33 @@ func (s *JourneysService) Find(journeyID int) (Journey, error) {
 
 	return journey, nil
 }
+
+func (s *JourneysService) All() ([]Journey, error) {
+	var journeys []Journey
+
+	err := s.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket([]byte(tripBucket))
+
+		cursor := bucket.Cursor()
+
+		for journeyID, journeyData := cursor.First(); journeyID != nil; journeyID, journeyData = cursor.Next() {
+			var journey Journey
+			buffer := bytes.NewBuffer(journeyData)
+			decoder := gob.NewDecoder(buffer)
+
+			if err := decoder.Decode(&journey); err != nil {
+				return errors.Wrapf(err, "fetching journeys: decoding journey#%d", journeyID)
+			}
+
+			journeys = append(journeys, journey)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return journeys, err
+	}
+
+	return journeys, nil
+}

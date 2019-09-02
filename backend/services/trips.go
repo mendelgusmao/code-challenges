@@ -95,3 +95,35 @@ func (s *TripsService) FindByJourneyID(journeyID int) (Trip, error) {
 
 	return trip, nil
 }
+
+func (s *TripsService) FindByCarID(carID int) ([]Trip, error) {
+	var trips []Trip
+
+	err := s.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket([]byte(tripBucket))
+
+		cursor := bucket.Cursor()
+
+		for tripID, tripData := cursor.First(); tripID != nil; tripID, tripData = cursor.Next() {
+			buffer := bytes.NewBuffer(tripData)
+			decoder := gob.NewDecoder(buffer)
+			var trip Trip
+
+			if err := decoder.Decode(&trip); err != nil {
+				return errors.Wrapf(err, "finding trip: decoding trip#%d", tripID)
+			}
+
+			if trip.CarID == carID {
+				trips = append(trips, trip)
+			}
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return trips, err
+	}
+
+	return trips, nil
+}

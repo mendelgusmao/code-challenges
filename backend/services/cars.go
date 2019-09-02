@@ -94,3 +94,33 @@ func (s *CarsService) Find(carID int) (Car, error) {
 
 	return car, nil
 }
+
+func (s *CarsService) All() ([]Car, error) {
+	var cars []Car
+
+	err := s.db.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket([]byte(tripBucket))
+
+		cursor := bucket.Cursor()
+
+		for carID, carData := cursor.First(); carID != nil; carID, carData = cursor.Next() {
+			var car Car
+			buffer := bytes.NewBuffer(carData)
+			decoder := gob.NewDecoder(buffer)
+
+			if err := decoder.Decode(&car); err != nil {
+				return errors.Wrapf(err, "fetching cars: decoding car#%d", carID)
+			}
+
+			cars = append(cars, car)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return cars, err
+	}
+
+	return cars, nil
+}
