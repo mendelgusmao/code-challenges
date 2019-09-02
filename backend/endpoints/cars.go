@@ -7,6 +7,7 @@ import (
 	"gitlab.com/cabify-challenge/car-pooling-challenge-mendelgusmao/backend/middleware"
 	"gitlab.com/cabify-challenge/car-pooling-challenge-mendelgusmao/backend/router"
 	"gitlab.com/cabify-challenge/car-pooling-challenge-mendelgusmao/backend/services"
+	"gitlab.com/cabify-challenge/car-pooling-challenge-mendelgusmao/backend/workers"
 	"go.etcd.io/bbolt"
 )
 
@@ -22,6 +23,9 @@ func putCars(w http.ResponseWriter, r *http.Request) {
 
 	if jsonDecoder(&cars) {
 		carsService := services.NewCarsService(db)
+
+		workers.TripMaker.Stop()
+		defer workers.TripMaker.Start()
 
 		if err := clearPool(db); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
