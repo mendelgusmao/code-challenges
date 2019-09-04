@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -31,5 +32,17 @@ func (p product) toServicesProduct() services.Product {
 		Width:  width,
 		Weight: weight,
 		Price:  price,
+	}
+}
+
+func (p *product) fromTaxedProduct(servicesProduct services.TaxedProduct) {
+	*p = product{
+		Name:   servicesProduct.Name,
+		Height: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Height), ".", ",", -1),
+		Length: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Length), ".", ",", -1),
+		Width:  strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Width), ".", ",", -1),
+		Weight: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Weight), ".", ",", -1),
+		Price:  strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Price), ".", ",", -1),
+		Tax:    strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Tax), ".", ",", -1),
 	}
 }
