@@ -1,7 +1,15 @@
 package router
 
 import (
+	"github.com/mendelgusmao/tax-challenge/backend/middleware"
+
 	"github.com/gorilla/mux"
 )
 
 var Router = mux.NewRouter()
+
+func init() {
+	Router.Use(middleware.ContentType("application/json; charset=utf-8"))
+	Router.Use(middleware.Logging)
+	Router.Use(middleware.JSONDecoder)
+}
