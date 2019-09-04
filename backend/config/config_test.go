@@ -12,6 +12,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	os.Setenv("TAXBACKEND_ADDRESS", expectedConfig.Address)
+	os.Setenv("TAXBACKEND_TAXRULES", "")
 
 	if err := Load(); err != nil {
 		t.Fatal(err)

@@ -11,6 +11,7 @@ var Backend Specification
 type Specification struct {
 	Address  string `default:":9091"`
 	Database string `default:"taxchallenge.boltdb"`
+	TaxRules string `default:"taxrules.json"`
 }
 
 var hooks []func(Specification) error

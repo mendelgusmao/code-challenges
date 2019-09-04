@@ -1,0 +1,4 @@
+{
+  "((height * length * width) * 300) <= 100": "price / 100 * 5",
+  "((height * length * width) * 300) > 100": "((height * length * width) * 300) * (weight / 1000)"
+}
