@@ -3,6 +3,7 @@ module github.com/mendelgusmao/tax-challenge
 go 1.13
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.7.3
 	github.com/kelseyhightower/envconfig v1.4.0
