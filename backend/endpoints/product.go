@@ -9,6 +9,7 @@ import (
 )
 
 type product struct {
+	ID     string `json:"id,omitempty"`
 	Name   string `json:"name"`
 	Height string `json:"height"`
 	Length string `json:"length"`
@@ -23,7 +24,7 @@ func (p product) toServicesProduct() services.Product {
 	length, _ := strconv.ParseFloat(strings.Replace(p.Length, ",", ".", -1), 64)
 	width, _ := strconv.ParseFloat(strings.Replace(p.Width, ",", ".", -1), 64)
 	weight, _ := strconv.ParseFloat(strings.Replace(p.Weight, ",", ".", -1), 64)
-	price, _ := strconv.ParseFloat(p.Price, 64)
+	price, _ := strconv.ParseFloat(strings.Replace(p.Price, ",", ".", -1), 64)
 
 	return services.Product{
 		Name:   p.Name,
@@ -37,11 +38,12 @@ func (p product) toServicesProduct() services.Product {
 
 func (p *product) fromTaxedProduct(servicesProduct services.TaxedProduct) {
 	*p = product{
+		ID:     fmt.Sprintf("%d", servicesProduct.ID),
 		Name:   servicesProduct.Name,
 		Height: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Height), ".", ",", -1),
 		Length: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Length), ".", ",", -1),
 		Width:  strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Width), ".", ",", -1),
-		Weight: strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Weight), ".", ",", -1),
+		Weight: strings.Replace(fmt.Sprintf("%0.0f", servicesProduct.Weight), ".", ",", -1),
 		Price:  strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Price), ".", ",", -1),
 		Tax:    strings.Replace(fmt.Sprintf("%.2f", servicesProduct.Tax), ".", ",", -1),
 	}

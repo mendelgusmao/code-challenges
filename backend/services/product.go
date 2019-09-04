@@ -11,6 +11,7 @@ type Product struct {
 
 type TaxedProduct struct {
 	Product
+	ID  uint64  `json:"id,omitempty"`
 	Tax float64 `json:"tax,omitempty"`
 }
 

@@ -33,6 +33,7 @@ func (ts *ProductStorage) Store(product TaxedProduct) (uint64, error) {
 
 		id, _ = bucket.NextSequence()
 		buffer := bytes.NewBuffer([]byte{})
+		product.ID = id
 
 		if err := json.NewEncoder(buffer).Encode(product); err != nil {
 			return err
