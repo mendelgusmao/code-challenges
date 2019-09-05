@@ -11,8 +11,8 @@ func TestLoad(t *testing.T) {
 		Address: "localhost:4321",
 	}
 
-	os.Setenv("TAXBACKEND_ADDRESS", expectedConfig.Address)
-	os.Setenv("TAXBACKEND_TAXRULES", "")
+	os.Setenv("TAXCHALLENGE_ADDRESS", expectedConfig.Address)
+	os.Setenv("TAXCHALLENGE_TAXRULES", "")
 
 	if err := Load(); err != nil {
 		t.Fatal(err)
