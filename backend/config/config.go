@@ -10,6 +10,7 @@ var Backend Specification
 type Specification struct {
 	Address string `default:":9091"`
 	Source  string
+	Portals string `default:"portals.yaml"`
 }
 
 var hooks []func(Specification) error

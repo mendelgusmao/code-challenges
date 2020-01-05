@@ -12,7 +12,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	os.Setenv("ZAPCHALLENGE_SOURCE", expectedConfig.Source)
-	os.Setenv("ZAPBACKEND_PORTALS", "")
+	os.Setenv("ZAPCHALLENGE_PORTALS", "")
 
 	if err := Load(); err != nil {
 		t.Fatal(err)
