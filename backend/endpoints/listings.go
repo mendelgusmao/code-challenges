@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/mendelgusmao/zap-challenge/backend/config"
 	"github.com/mendelgusmao/zap-challenge/backend/router"
 	"github.com/mendelgusmao/zap-challenge/backend/services/filter"
+	"github.com/mendelgusmao/zap-challenge/backend/services/model"
 	"github.com/mendelgusmao/zap-challenge/backend/services/source"
 )
 
@@ -45,6 +47,31 @@ func getListings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	paginatedResponse := paginateResponse(r, filteredListings)
+
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(filteredListings)
+	json.NewEncoder(w).Encode(paginatedResponse)
+}
+
+func paginateResponse(r *http.Request, listings []model.Listing) *ListingsResponse {
+	var (
+		page int64 = 1
+		size int64 = 10
+	)
+
+	r.ParseForm()
+
+	sizeFormValue, err := strconv.ParseInt(r.FormValue("size"), 10, 32)
+
+	if err == nil && sizeFormValue >= 10 && sizeFormValue <= 100 {
+		size = sizeFormValue
+	}
+
+	pageFormValue, err := strconv.ParseInt(r.FormValue("page"), 10, 32)
+
+	if err == nil && pageFormValue > 0 {
+		page = pageFormValue
+	}
+
+	return NewListingsResponse(listings).Paginate(page, size)
 }
