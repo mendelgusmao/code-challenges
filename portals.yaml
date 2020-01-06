@@ -1,0 +1,32 @@
+bounding_box:
+  min_lon: -46.693419
+  min_lat: -23.568704
+  max_lon: -46.641146
+  max_lat: -23.546686
+
+portal_rules:
+  zap:
+    rules:
+      - "(addressGeoLat > 0 && addressGeoLon > 0)"
+      - >
+        (
+          pricingInfosBusinessType == 'RENTAL'
+          && pricingInfosRentalTotalPrice >= 3500
+        ) || (
+          pricingInfosBusinessType == 'SALE'
+          && pricingInfosPrice >= (insideBoundingBox(addressGeoLat, addressGeoLon) ? 600000 * 0.9 : 600000)
+          && usableAreas > 0
+          && pricingInfosPrice / usableAreas > 3500
+        )
+  vivareal:
+    rules:
+      - "(addressGeoLat > 0 && addressGeoLon > 0)"
+      - >
+        (
+          pricingInfosBusinessType == 'RENTAL'
+          && pricingInfosRentalTotalPrice <= (insideBoundingBox(addressGeoLat, addressGeoLon) ? 4000 * 1.5 : 4000)
+          && monthlyCondoFee > 0 ? (monthlyCondoFee < pricingInfosRentalTotalPrice * 0.3) : true
+        ) || (
+          pricingInfosBusinessType == 'SALE'
+          && pricingInfosPrice <= 700000
+        )
