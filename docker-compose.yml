@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  tony-invoice-issuer:
+    image: tony/invoice-issuer
+    env_file: infrastructure/env/invoice-issuer.env
+    volumes:
+      - certs:/certs
+  tony-invoice-webhook:
+    image: tony/invoice-webhook
+    env_file: infrastructure/env/invoice-webhook.env
+    volumes:
+      - certs:/certs
+    ports:
+      - '8443:8443'
+
+volumes:
+  certs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./infrastructure/certs
+      o: bind
